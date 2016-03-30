@@ -1,18 +1,21 @@
 package com.sam_chordas.android.stockhawk.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.data.Entry;
 import com.sam_chordas.android.stockhawk.R;
-import com.sam_chordas.android.stockhawk.RestClient;
 import com.sam_chordas.android.stockhawk.StudentService;
+import com.sam_chordas.android.stockhawk.model.DateHigh;
+import com.sam_chordas.android.stockhawk.model.DateHighMain;
 import com.sam_chordas.android.stockhawk.model.Quote;
 import com.sam_chordas.android.stockhawk.model.QuoteInfo;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,24 +23,28 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class DetailActivity extends Activity implements Callback<QuoteInfo> {
+public class DetailActivity extends AppCompatActivity implements Callback<QuoteInfo> {
+//public class DetailActivity extends AppCompatActivity {
 
-    RestClient restClient;
     TextView textView;
     String result;
     ProgressBar pb;
-    RelativeLayout mainlayout;
+
+    public ArrayList<Entry> valueSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+//        pb.setVisibility(View.VISIBLE);
+//        LineChartFragment fragment = new LineChartFragment();
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.container_fg, fragment)
+//                .commit();
+
         String symbol = getIntent().getExtras().getString("symbol");
-        mainlayout = (RelativeLayout)findViewById(R.id.mainLayout);
-        textView = (TextView)findViewById(R.id.textView);
         pb = (ProgressBar)findViewById(R.id.progressBar);
-        textView.setText(symbol);
-//        mainlayout.setVisibility(View.INVISIBLE);
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://query.yahooapis.com/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -66,6 +73,37 @@ public class DetailActivity extends Activity implements Callback<QuoteInfo> {
         }
 //        textView.setText(result);
 //        Log.d("result:::",quoteInfo.query.results.quote.get(1).high);
+        //Storing the response if any
+
+        valueSet = new ArrayList<>();
+        int i=0;
+        DateHigh dh = new DateHigh();
+        for (Quote highVal:quoteInfo.query.results.quote
+             ) {
+            dh.quote_date = highVal.quote_date;
+            dh.quote_high_value = highVal.high;
+//            valueSet.add(new Entry(Float.parseFloat(highVal.high),i++));
+
+        }
+//        Entry v1e1 = new Entry(110.000f, 0);
+//        valueSet1.add(v1e1);
+        DateHighMain dhm = new DateHighMain();
+//        if(dhm.datehigh.size()>0) {
+//            dhm.datehigh.clear();
+//        }
+        dhm.datehigh.add(dh);
+
+
+        LineChartFragment fragment = new LineChartFragment();
+
+//        if (result != null) {
+//            Bundle args = new Bundle();
+//            args.putParcelable(LineChartFragment.xAxisValues, valueSet);
+//            fragment.setArguments(args);
+//        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_fg, fragment)
+                .commit();
     }
 
     @Override
