@@ -92,7 +92,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 int dateColumnIndex = mCursor.getColumnIndex(QuoteColumns.SYMBOL);
                 String symbol = mCursor.getString(dateColumnIndex);
 //                Intent myIntent = new Intent(mContext, DetailActivity.class);
-                Intent myIntent = new Intent(mContext, SimpleChartDemo.class);
+                Intent myIntent = new Intent(mContext, DetailActivity.class);
                 myIntent.putExtra("symbol",symbol);
                 mContext.startActivity(myIntent);
               }

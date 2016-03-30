@@ -37,11 +37,7 @@ public class DetailActivity extends Activity implements Callback<QuoteInfo> {
         textView = (TextView)findViewById(R.id.textView);
         pb = (ProgressBar)findViewById(R.id.progressBar);
         textView.setText(symbol);
-        mainlayout.setVisibility(View.INVISIBLE);
-//
-//        setProgressBarIndeterminateVisibility(true);
-//        setProgressBarVisibility(true);
-//        restClient = new RestClient();
+//        mainlayout.setVisibility(View.INVISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://query.yahooapis.com/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -61,16 +57,14 @@ public class DetailActivity extends Activity implements Callback<QuoteInfo> {
 
     @Override
     public void onResponse(Call<QuoteInfo> call, Response<QuoteInfo> response) {
-//        setProgressBarIndeterminateVisibility(false);
-//        textView.setText(response.body().query.lang);
         pb.setVisibility(View.GONE);
-        mainlayout.setVisibility(View.VISIBLE);
+//        mainlayout.setVisibility(View.VISIBLE);
         QuoteInfo quoteInfo = response.body();
         for (Quote s:quoteInfo.query.results.quote
         ) {
             result+=s.high+"\n";
         }
-        textView.setText(result);
+//        textView.setText(result);
 //        Log.d("result:::",quoteInfo.query.results.quote.get(1).high);
     }
 

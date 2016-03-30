@@ -36,6 +36,14 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+
+        android:id="@+id/fragment_forecast"
+        android:name="com.sam_chordas.android.stockhawk.ui.LineChartFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 </RelativeLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
