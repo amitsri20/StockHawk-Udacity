@@ -12,7 +12,7 @@ public class RestClient {
 //    private static final String URL = "http://instinctcoder.com/wp-content/uploads/2015/08/";
     private static final String URL = "https://query.yahooapis.com/v1/";
 //    private retrofit.RestAdapter restAdapter;
-    private StudentService studentService;
+    private QuoteService quoteService;
 
     public RestClient()
     {
@@ -24,11 +24,11 @@ public class RestClient {
 
 
 //        studentService = restAdapter.create(StudentService.class);
-        studentService = retrofit.create(StudentService.class);
+        quoteService = retrofit.create(QuoteService.class);
     }
 
-    public StudentService getService()
+    public QuoteService getService()
     {
-        return studentService;
+        return quoteService;
     }
 }

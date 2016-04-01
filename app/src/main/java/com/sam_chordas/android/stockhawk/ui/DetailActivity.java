@@ -1,6 +1,7 @@
 package com.sam_chordas.android.stockhawk.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -9,7 +10,7 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.data.Entry;
 import com.sam_chordas.android.stockhawk.R;
-import com.sam_chordas.android.stockhawk.StudentService;
+import com.sam_chordas.android.stockhawk.QuoteService;
 import com.sam_chordas.android.stockhawk.model.DateHigh;
 import com.sam_chordas.android.stockhawk.model.DateHighMain;
 import com.sam_chordas.android.stockhawk.model.Quote;
@@ -29,6 +30,9 @@ public class DetailActivity extends AppCompatActivity implements Callback<QuoteI
     TextView textView;
     String result;
     ProgressBar pb;
+
+    DateHighMain dhm = new DateHighMain();
+
 
     public ArrayList<Entry> valueSet;
 
@@ -51,10 +55,14 @@ public class DetailActivity extends AppCompatActivity implements Callback<QuoteI
                 .build();
 
         // prepare call in Retrofit 2.0
-        StudentService stackOverflowAPI = retrofit.create(StudentService.class);
-
+        QuoteService stackOverflowAPI = retrofit.create(QuoteService.class);
+//        String q = "select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22YHOO%22%20and%20startDate%20%3D%20%222016-03-21%22%20and%20endDate%20%3D%20%222016-03-25%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
 //        Call<QuoteInfo> call = restClient.getService().getObjectWithNestedArraysAndObject();
-        Call<QuoteInfo> call = stackOverflowAPI.getObjectWithNestedArraysAndObject();
+        String q = "select * from yahoo.finance.historicaldata where symbol = \""+symbol+"\" and startDate = \"2015-10-23\" and endDate = \"2016-03-23\"";
+        String diagnostics = "true";
+        String env = "store://datatables.org/alltableswithkeys";
+        String format = "json";
+        Call<QuoteInfo> call = stackOverflowAPI.getObjectWithNestedArraysAndObject(q,diagnostics,env,format);
 
         //asynchronous call
         call.enqueue(this);
@@ -67,34 +75,23 @@ public class DetailActivity extends AppCompatActivity implements Callback<QuoteI
         pb.setVisibility(View.GONE);
 //        mainlayout.setVisibility(View.VISIBLE);
         QuoteInfo quoteInfo = response.body();
-        for (Quote s:quoteInfo.query.results.quote
-        ) {
-            result+=s.high+"\n";
-        }
-//        textView.setText(result);
-//        Log.d("result:::",quoteInfo.query.results.quote.get(1).high);
         //Storing the response if any
 
         valueSet = new ArrayList<>();
+        ArrayList<Quote> quoteArray = quoteInfo.query.results.quote;
         int i=0;
-        DateHigh dh = new DateHigh();
-        for (Quote highVal:quoteInfo.query.results.quote
+
+        for (i=0;i<quoteArray.size();i++
              ) {
-            dh.quote_date = highVal.quote_date;
-            dh.quote_high_value = highVal.high;
-//            valueSet.add(new Entry(Float.parseFloat(highVal.high),i++));
-
+            DateHigh dh = new DateHigh();
+            dh.setQuoteDate(quoteArray.get(i).quote_date);
+            dh.setQuoteHighValue(quoteArray.get(i).high);
+            dhm.getDatehigh().add(dh);
         }
-//        Entry v1e1 = new Entry(110.000f, 0);
-//        valueSet1.add(v1e1);
-        DateHighMain dhm = new DateHighMain();
-//        if(dhm.datehigh.size()>0) {
-//            dhm.datehigh.clear();
-//        }
-        dhm.datehigh.add(dh);
 
 
-        LineChartFragment fragment = new LineChartFragment();
+
+        Fragment fragment = LineChartFragment.newInstance(dhm);
 
 //        if (result != null) {
 //            Bundle args = new Bundle();

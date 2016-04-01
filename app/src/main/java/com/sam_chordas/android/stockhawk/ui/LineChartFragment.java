@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,28 +28,27 @@ public class LineChartFragment extends Fragment {
 
     private Typeface tf;
     static final ArrayList<Entry> xAxisValues= null;
-
+//    DateHighMain dhm = new DateHighMain();
+private static final String DESCRIBABLE_KEY = "describable_key";
+    private DateHighMain mDescribable;
 
 
     public LineChartFragment() {
         // Required empty public constructor
     }
 
-    public static LineChartFragment newInstance() {
+    public static LineChartFragment newInstance(DateHighMain describable) {
         LineChartFragment fragment = new LineChartFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(DESCRIBABLE_KEY, describable);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DateHighMain dhm = new DateHighMain();
-        for (DateHigh dh:dhm.datehigh
-             ) {
-            Log.d("Quote value::",dh.quote_date+dh.quote_high_value);
-        }
+
     }
 
     @Override
@@ -59,12 +57,18 @@ public class LineChartFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_line_chart, container, false);
 
-
+        mDescribable = (DateHighMain) getArguments().getSerializable(
+                DESCRIBABLE_KEY);
         LineChart mChart = (LineChart) rootView.findViewById(R.id.chart);
         LineData data = new LineData(getXAxisValues(),getDataSet());
 
 //        data.setValueTypeface(tf);
+//        DateHighMain dhm = new DateHighMain();
 
+//        for (DateHigh dh:mDescribable.datehigh
+//                ) {
+////            Log.d("Quote value::",dh.quote_date+dh.quote_high_value);
+//        }
         setUpChart(mChart,data);
 
 
@@ -106,6 +110,7 @@ public class LineChartFragment extends Fragment {
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(false);
         xAxis.setSpaceBetweenLabels(1);
+        xAxis.setEnabled(false);
 
         YAxis leftAxis = mChart.getAxisLeft();
 //        leftAxis.setTypeface(tf);
@@ -128,18 +133,16 @@ public class LineChartFragment extends Fragment {
         ArrayList<ILineDataSet> dataSets = null;
 
         ArrayList<Entry> valueSet1 = new ArrayList<>();
-        Entry v1e1 = new Entry(110.000f, 0); // Jan
-        valueSet1.add(v1e1);
-        Entry v1e2 = new Entry(40.000f, 1); // Feb
-        valueSet1.add(v1e2);
-        Entry v1e3 = new Entry(60.000f, 2); // Mar
-        valueSet1.add(v1e3);
-        Entry v1e4 = new Entry(30.000f, 3); // Apr
-        valueSet1.add(v1e4);
-        Entry v1e5 = new Entry(90.000f, 4); // May
-        valueSet1.add(v1e5);
-        Entry v1e6 = new Entry(100.000f, 5); // Jun
-        valueSet1.add(v1e6);
+//        Entry v1e1 = new Entry(110.000f, 0); // Jan
+        int i=0;
+
+        for (DateHigh dh:mDescribable.datehigh
+                ) {
+//            Log.d("Quote value::",dh.quote_date+dh.quote_high_value);
+            valueSet1.add(new Entry(Float.parseFloat(dh.getQuoteHighValue()), i++));
+        }
+
+
 
         LineDataSet lineDataSet = new LineDataSet(valueSet1, "Brand 1");
         lineDataSet.setColor(Color.rgb(0, 155, 0));
@@ -152,12 +155,11 @@ public class LineChartFragment extends Fragment {
 
     private ArrayList<String> getXAxisValues() {
         ArrayList<String> xAxis = new ArrayList<>();
-        xAxis.add("JAN");
-        xAxis.add("FEB");
-        xAxis.add("MAR");
-        xAxis.add("APR");
-        xAxis.add("MAY");
-        xAxis.add("JUN");
+
+        for (DateHigh dh:mDescribable.datehigh
+                ) {
+            xAxis.add("A");
+        }
         return xAxis;
     }
 
