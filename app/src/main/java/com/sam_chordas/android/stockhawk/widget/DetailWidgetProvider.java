@@ -45,6 +45,12 @@ public class DetailWidgetProvider extends AppWidgetProvider {
             Intent clickIntentTemplate = useDetailActivity
                     ? new Intent(context, DetailActivity.class)
                     : new Intent(context, MyStocksActivity.class);
+
+//            int dateColumnIndex = mCursor.getColumnIndex(QuoteColumns.SYMBOL);
+//            String symbol = mCursor.getString(dateColumnIndex);
+////                Intent myIntent = new Intent(mContext, DetailActivity.class);
+//            clickIntentTemplate.putExtra("symbol",symbol);
+
             PendingIntent clickPendingIntentTemplate = TaskStackBuilder.create(context)
                     .addNextIntentWithParentStack(clickIntentTemplate)
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);

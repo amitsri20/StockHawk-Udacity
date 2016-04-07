@@ -10,11 +10,21 @@
     <string name="input_hint">FB</string>
     <string name="input_prefill"></string>
     <string name="widget_title">Today\'s Market</string>
-    <string name="network_toast">Uh-oh! This app requires an internet connection</string>
+    <string name="network_toast" translatable="true">Uh-oh! This app requires an internet connection</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="action_add_description">Click this to add new Quote</string>
     <string name="empty_list">Empty list</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="invalid_symbol">Invalid Quote symbol</string>
+    <string name="stock_exist_text">This stock is already saved!</string>
+    <string name="quote_history_text">Quote history</string>
+    <string name="quote_history_error">No data available.</string>
+    <string name="one_week">1W</string>
+    <string name="one_month">1M</string>
+    <string name="three_month">3M</string>
+    <string name="six_month">6M</string>
+    <string name="one_year">1Y</string>
+    <string name="spineer_title">Stock history range</string>
 </resources>

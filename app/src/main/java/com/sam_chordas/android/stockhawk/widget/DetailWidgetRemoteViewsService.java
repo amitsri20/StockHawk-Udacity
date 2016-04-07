@@ -103,8 +103,9 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
 
                 final Intent fillInIntent = new Intent();
 
-                Uri weatherUri = QuoteProvider.Quotes.CONTENT_URI;
-                fillInIntent.setData(weatherUri);
+                Uri quoteUri = QuoteProvider.Quotes.CONTENT_URI;
+//                fillInIntent.setData(weatherUri);
+                fillInIntent.putExtra("symbol",data.getString(INDEX_QUOTE_SYMBOL));
                 views.setOnClickFillInIntent(R.id.widget_list_item, fillInIntent);
                 return views;
             }
